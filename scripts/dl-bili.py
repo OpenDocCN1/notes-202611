@@ -147,20 +147,17 @@ def main():
         subp.run([
             'yt-dlp', f'https://www.bilibili.com/video/{bv}',
             '--cookies-from-browser', 'firefox',
-        ], shell=True)
-        mp4_fnames = [f for f in os.listdir() if f.endswith('.mp4')]
-        for f in mp4_fnames:
-            nf = re.sub(r'[\[\]\x20', '-', f)
-            os.rename(f, nf)
+        ], shell=True, check=True)
         subp.run([
             'auto-video', 'note', '.'
-        ], shell=True)
+        ], shell=True, check=True)
         md_fnames = [f for f in os.listdir() if f.endswith('.md')]
         for f in md_fnames:
             print(f)
             fmp4 = f.replace('.md', '.mp4')
             if path.isfile(fmp4): os.remove(fmp4)
-            os.rename(f, f'../docs/{f}')
+            nf = re.sub(r'[\[\]\x20]', '-', f)
+            os.rename(f, f'../docs/{nf}')
         for f in os.listdir('img'):
             print(f)
             os.rename(f'img/{f}', f'../docs/img/{f}')
