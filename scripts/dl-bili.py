@@ -7,7 +7,8 @@ import os
 from os import path
 import json
 import re
-
+from BookerDownloadTool.ext_cookie import extract_cookies_multi_browsers
+from BookerDownloadTool.util import cookie_dict_to_str
 import requests
 
 UID = '27174700'
@@ -60,6 +61,8 @@ def get_all_user_bvids(uid: int, max_retries: int = 3) -> list[str]:
     返回:
         BV 号字符串列表，按接口默认排序（通常为发布时间倒序）
     """
+    cookies = extract_cookies_multi_browsers('bilibili.com')
+    cookies = cookie_dict_to_str(cookies)
     session = requests.Session()
     session.headers.update({
         "User-Agent": (
@@ -68,6 +71,7 @@ def get_all_user_bvids(uid: int, max_retries: int = 3) -> list[str]:
             "Chrome/120.0.0.0 Safari/537.36"
         ),
         "Referer": f"https://space.bilibili.com/{uid}/video",
+        'Cookie': cookies,
     })
 
     # 1. 获取当日 WBI 密钥（img_key / sub_key 每日轮换）
