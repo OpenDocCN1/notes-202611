@@ -126,9 +126,19 @@ def main():
     else:
         bvids = get_all_user_bvids(UID)
         open(bvid_fname, 'w', encoding='utf8').write(json.dumps(bvids))
-    print(f"共获取 {len(bvids)} 个 BV 号")
-    print(bvids[:10])
+    print(f"共获取 {len(bvids)} 个 BV 号：{bvids[:10]} ...")
+    exi_bvids = []
+    exi_fname = '../asset/exi_bvids.txt'
+    if path.isfile(exi_fname):
+        exi_bvids = open(exi_fname, encoding='utf8').read().split('\n')
+        exi_bvids = [l.strip() for l in exi_bvids if l.strip()]
+    print(f"已存在 {len(exi_bvids)} 个 BV 号：{exi_bvids[:10]} ...")
+    exi_bvids = set(exi_bvids)
+    os.makedirs('img', exist_ok=True)
+    os.makedirs('../docs/img', exist_ok=True)
     for bv in bvids:
+        if bv in exi_bvids: continue
+        print(bv)
         subp.run([
             'dl-ytp', f'https://www.bilibili.com/video/{bv}',
             '--cookies-from-browser', 'firefox',
@@ -149,6 +159,7 @@ def main():
         for f in os.listdir('img'):
             print(f)
             os.rename(f'img/{f}', f'../docs/img/{f}')
+        open(exi_fname, 'a', encoding='utf8').write(bv + '\n')
         
 
 
