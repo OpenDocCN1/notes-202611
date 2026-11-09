@@ -145,7 +145,7 @@ def main():
         if bv in exi_bvids: continue
         print(bv)
         subp.run([
-            'dl-ytp', f'https://www.bilibili.com/video/{bv}',
+            'yt-dlp', f'https://www.bilibili.com/video/{bv}',
             '--cookies-from-browser', 'firefox',
         ], shell=True)
         mp4_fnames = [f for f in os.listdir() if f.endswith('.mp4')]
