@@ -78,6 +78,7 @@ def get_all_user_bvids(uid: int, max_retries: int = 3) -> list[str]:
     ps = 50  # 每页条数，50 为常见上限，可适当调低
 
     while True:
+        print(f'开始获取用户【{uid}】第 {pn} 页视频')
         params = _enc_wbi(
             {"mid": uid, "pn": pn, "ps": ps, "order": "pubdate"},
             img_key,
@@ -120,7 +121,7 @@ def get_all_user_bvids(uid: int, max_retries: int = 3) -> list[str]:
 
 
 def main():
-    bvid_fname = f'../asset{UID}.json'
+    bvid_fname = f'../asset/{UID}.json'
     if path.isfile(bvid_fname):
         bvids = json.loads(open(bvid_fname, encoding='utf8').read())
     else:
